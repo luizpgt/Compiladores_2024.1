@@ -1,0 +1,30 @@
+¨ This is a comment !
+¨ This files contains regular grammars and tokens.
+¨ It is meant to guaranteed work with at most: 
+¨	1 Regular grammar, with N rules
+¨	N Tokens of any reasonable length
+
+¨<S> ::= a<A> | b<A>
+¨<A>::=c<S>|d<S>
+
+¨se
+¨entao
+¨senao
+¨
+¨<S> ::= a<A> | e<A> | i<A> | o<A> | u<A>
+¨<A> ::= a<A> | e<A> | i<A> | o<A> | u<A> | ε
+
+¨<S> ::= b<A> | c<B> | d
+¨<A> ::= b<A> | f<B> | ε
+¨<B> ::= g<B> | h
+¨se
+¨sei
+¨bola
+
+plus
+times
+popen
+pclose
+
+<S> ::= 0<A> | 1<A> | 2<A> | 3<A> | 4<A> | 5<A> | 6<A> | 7<A> | 8<A> | 9<A>
+<A> ::= 0<A> | 1<A> | 2<A> | 3<A> | 4<A> | 5<A> | 6<A> | 7<A> | 8<A> | 9<A> | ε
