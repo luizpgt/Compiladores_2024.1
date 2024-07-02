@@ -1,0 +1,134 @@
+============================================================
+GOLD Parser Builder
+Version 5.2.0.
+============================================================
+
+
+========================================
+Terminals
+========================================
+
+ 0      (EOF)
+ 1      (Error)
+ 2      Whitespace
+ 3      a
+ 4      w
+ 5      xyz
+
+
+========================================
+Nonterminals
+========================================
+
+6       <A>
+7       <B>
+
+
+========================================
+Rules
+========================================
+
+0       <A> ::= xyz <A> <B>
+1       <A> ::= w
+2       <B> ::= a <A>
+3       <B> ::= a
+
+
+========================================
+LALR States
+========================================
+
+State 0
+        <S'> ::= _ <A> (EOF)         <S'> ::= ^ <A> (EOF)
+        <A> ::= _ xyz <A> <B>        <A> ::= ^ xyz <A> <B>
+        <A> ::= _ w                  <A> ::= ^ w
+
+        w s 1
+        xyz s 2
+        <A> g 3
+
+
+State 1
+        Prior States: 0, 2, 5
+
+        <A> ::= w _                  <A> ::= w ^
+
+        (EOF) r 1
+        a r 1
+
+
+State 2
+        Prior States: 0, 2, 5
+
+        <A> ::= xyz _ <A> <B>        <A> ::= xyz ^ <A> <B>
+        <A> ::= _ xyz <A> <B>        <A> ::= ^ xyz <A> <B>
+        <A> ::= _ w                  <A> ::= ^ w
+
+        w s 1
+        xyz s 2
+        <A> g 4
+
+
+State 3
+        Prior States: 0
+
+        <S'> ::= <A> _ (EOF)         <S'> ::= <A> ^ (EOF)
+
+        (EOF) a
+
+
+State 4
+        Prior States: 2
+
+        <A> ::= xyz <A> _ <B>        <A> ::= xyz <A> ^ <B>
+        <B> ::= _ a <A>              <B> ::= ^ a <A>
+        <B> ::= _ a                  <B> ::= ^ a
+
+        a s 5
+        <B> g 6
+
+
+State 5
+        Prior States: 4
+
+        <B> ::= a _ <A>              <B> ::= a ^ <A>
+        <B> ::= a _                  <B> ::= a ^
+        <A> ::= _ xyz <A> <B>        <A> ::= ^ xyz <A> <B>
+        <A> ::= _ w                  <A> ::= ^ w
+
+        w s 1
+        xyz s 2
+        <A> g 7
+        (EOF) r 3
+        a r 3
+
+
+State 6
+        Prior States: 4
+
+        <A> ::= xyz <A> <B> _        <A> ::= xyz <A> <B> ^
+
+        (EOF) r 0
+        a r 0
+
+
+State 7
+        Prior States: 5
+
+        <B> ::= a <A> _              <B> ::= a <A> ^
+
+        (EOF) r 2
+        a r 2
+
+
+
+
+========================================
+System Log
+========================================
+
+Grammar        Success           The grammar was successfully analyzed
+LALR States    Success           LALR Table was succesfully created
+
+
+

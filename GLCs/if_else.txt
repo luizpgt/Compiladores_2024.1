@@ -1,0 +1,159 @@
+============================================================
+GOLD Parser Builder
+Version 5.2.0.
+============================================================
+
+
+========================================
+Terminals
+========================================
+
+ 0      (EOF)
+ 1      (Error)
+ 2      Whitespace
+ 3      a
+ 4      b
+ 5      else
+ 6      if
+ 7      then
+
+
+========================================
+Nonterminals
+========================================
+
+8       <A>
+9       <C>
+10      <S>
+
+
+========================================
+Rules
+========================================
+
+0       <S> ::= if <C> then <S> <A>
+1       <S> ::= a
+2       <A> ::= else <S>
+3       <C> ::= b
+
+
+========================================
+LALR States
+========================================
+
+State 0
+        <S'> ::= _ <S> (EOF)                 <S'> ::= ^ <S> (EOF)
+        <S> ::= _ if <C> then <S> <A>        <S> ::= ^ if <C> then <S> <A>
+        <S> ::= _ a                          <S> ::= ^ a
+
+        a s 1
+        if s 2
+        <S> g 3
+
+
+State 1
+        Prior States: 0, 6, 8
+
+        <S> ::= a _                          <S> ::= a ^
+
+        (EOF) r 1
+        else r 1
+
+
+State 2
+        Prior States: 0, 6, 8
+
+        <S> ::= if _ <C> then <S> <A>        <S> ::= if ^ <C> then <S> <A>
+        <C> ::= _ b                          <C> ::= ^ b
+
+        b s 4
+        <C> g 5
+
+
+State 3
+        Prior States: 0
+
+        <S'> ::= <S> _ (EOF)                 <S'> ::= <S> ^ (EOF)
+
+        (EOF) a
+
+
+State 4
+        Prior States: 2
+
+        <C> ::= b _                          <C> ::= b ^
+
+        then r 3
+
+
+State 5
+        Prior States: 2
+
+        <S> ::= if <C> _ then <S> <A>        <S> ::= if <C> ^ then <S> <A>
+
+        then s 6
+
+
+State 6
+        Prior States: 5
+
+        <S> ::= if <C> then _ <S> <A>        <S> ::= if <C> then ^ <S> <A>
+        <S> ::= _ if <C> then <S> <A>        <S> ::= ^ if <C> then <S> <A>
+        <S> ::= _ a                          <S> ::= ^ a
+
+        a s 1
+        if s 2
+        <S> g 7
+
+
+State 7
+        Prior States: 6
+
+        <S> ::= if <C> then <S> _ <A>        <S> ::= if <C> then <S> ^ <A>
+        <A> ::= _ else <S>                   <A> ::= ^ else <S>
+
+        else s 8
+        <A> g 9
+
+
+State 8
+        Prior States: 7
+
+        <A> ::= else _ <S>                   <A> ::= else ^ <S>
+        <S> ::= _ if <C> then <S> <A>        <S> ::= ^ if <C> then <S> <A>
+        <S> ::= _ a                          <S> ::= ^ a
+
+        a s 1
+        if s 2
+        <S> g 10
+
+
+State 9
+        Prior States: 7
+
+        <S> ::= if <C> then <S> <A> _        <S> ::= if <C> then <S> <A> ^
+
+        (EOF) r 0
+        else r 0
+
+
+State 10
+        Prior States: 8
+
+        <A> ::= else <S> _                   <A> ::= else <S> ^
+
+        (EOF) r 2
+        else r 2
+
+
+
+
+========================================
+System Log
+========================================
+
+Grammar        Success           The grammar was successfully analyzed
+LALR States    Success           LALR Table was succesfully created
+
+
+

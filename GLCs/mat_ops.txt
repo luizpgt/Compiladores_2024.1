@@ -1,0 +1,205 @@
+============================================================
+GOLD Parser Builder
+Version 5.2.0.
+============================================================
+
+
+========================================
+Terminals
+========================================
+
+ 0      (EOF)
+ 1      (Error)
+ 2      Whitespace
+ 3      a
+ 4      pclose
+ 5      plus
+ 6      popen
+ 7      times
+
+
+========================================
+Nonterminals
+========================================
+
+8       <E>
+9       <F>
+10      <T>
+
+
+========================================
+Rules
+========================================
+
+0       <E> ::= <E> plus <T>
+1       <E> ::= <T>
+2       <T> ::= <T> times <F>
+3       <T> ::= <F>
+4       <F> ::= popen <E> pclose
+5       <F> ::= a
+
+
+========================================
+LALR States
+========================================
+
+State 0
+        <S'> ::= _ <E> (EOF)              <S'> ::= ^ <E> (EOF)
+        <E> ::= _ <E> plus <T>            <E> ::= ^ <E> plus <T>
+        <E> ::= _ <T>                     <E> ::= ^ <T>
+        <T> ::= _ <T> times <F>           <T> ::= ^ <T> times <F>
+        <T> ::= _ <F>                     <T> ::= ^ <F>
+        <F> ::= _ popen <E> pclose        <F> ::= ^ popen <E> pclose
+        <F> ::= _ a                       <F> ::= ^ a
+
+        a s 1
+        popen s 2
+        <E> g 3
+        <F> g 4
+        <T> g 5
+
+
+State 1
+        Prior States: 0, 2, 7, 8
+
+        <F> ::= a _                       <F> ::= a ^
+
+        (EOF) r 5
+        pclose r 5
+        plus r 5
+        times r 5
+
+
+State 2
+        Prior States: 0, 2, 7, 8
+
+        <F> ::= popen _ <E> pclose        <F> ::= popen ^ <E> pclose
+        <E> ::= _ <E> plus <T>            <E> ::= ^ <E> plus <T>
+        <E> ::= _ <T>                     <E> ::= ^ <T>
+        <T> ::= _ <T> times <F>           <T> ::= ^ <T> times <F>
+        <T> ::= _ <F>                     <T> ::= ^ <F>
+        <F> ::= _ popen <E> pclose        <F> ::= ^ popen <E> pclose
+        <F> ::= _ a                       <F> ::= ^ a
+
+        a s 1
+        popen s 2
+        <E> g 6
+        <F> g 4
+        <T> g 5
+
+
+State 3
+        Prior States: 0
+
+        <S'> ::= <E> _ (EOF)              <S'> ::= <E> ^ (EOF)
+        <E> ::= <E> _ plus <T>            <E> ::= <E> ^ plus <T>
+
+        (EOF) a
+        plus s 7
+
+
+State 4
+        Prior States: 0, 2, 7
+
+        <T> ::= <F> _                     <T> ::= <F> ^
+
+        (EOF) r 3
+        pclose r 3
+        plus r 3
+        times r 3
+
+
+State 5
+        Prior States: 0, 2
+
+        <E> ::= <T> _                     <E> ::= <T> ^
+        <T> ::= <T> _ times <F>           <T> ::= <T> ^ times <F>
+
+        times s 8
+        (EOF) r 1
+        pclose r 1
+        plus r 1
+
+
+State 6
+        Prior States: 2
+
+        <F> ::= popen <E> _ pclose        <F> ::= popen <E> ^ pclose
+        <E> ::= <E> _ plus <T>            <E> ::= <E> ^ plus <T>
+
+        pclose s 9
+        plus s 7
+
+
+State 7
+        Prior States: 3, 6
+
+        <E> ::= <E> plus _ <T>            <E> ::= <E> plus ^ <T>
+        <T> ::= _ <T> times <F>           <T> ::= ^ <T> times <F>
+        <T> ::= _ <F>                     <T> ::= ^ <F>
+        <F> ::= _ popen <E> pclose        <F> ::= ^ popen <E> pclose
+        <F> ::= _ a                       <F> ::= ^ a
+
+        a s 1
+        popen s 2
+        <F> g 4
+        <T> g 10
+
+
+State 8
+        Prior States: 5, 10
+
+        <T> ::= <T> times _ <F>           <T> ::= <T> times ^ <F>
+        <F> ::= _ popen <E> pclose        <F> ::= ^ popen <E> pclose
+        <F> ::= _ a                       <F> ::= ^ a
+
+        a s 1
+        popen s 2
+        <F> g 11
+
+
+State 9
+        Prior States: 6
+
+        <F> ::= popen <E> pclose _        <F> ::= popen <E> pclose ^
+
+        (EOF) r 4
+        pclose r 4
+        plus r 4
+        times r 4
+
+
+State 10
+        Prior States: 7
+
+        <E> ::= <E> plus <T> _            <E> ::= <E> plus <T> ^
+        <T> ::= <T> _ times <F>           <T> ::= <T> ^ times <F>
+
+        times s 8
+        (EOF) r 0
+        pclose r 0
+        plus r 0
+
+
+State 11
+        Prior States: 8
+
+        <T> ::= <T> times <F> _           <T> ::= <T> times <F> ^
+
+        (EOF) r 2
+        pclose r 2
+        plus r 2
+        times r 2
+
+
+
+
+========================================
+System Log
+========================================
+
+Grammar        Success           The grammar was successfully analyzed
+LALR States    Success           LALR Table was succesfully created
+
+
+

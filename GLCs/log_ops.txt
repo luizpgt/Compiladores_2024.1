@@ -1,0 +1,182 @@
+============================================================
+GOLD Parser Builder
+Version 5.2.0.
+============================================================
+
+
+========================================
+Terminals
+========================================
+
+ 0      (EOF)
+ 1      (Error)
+ 2      Whitespace
+ 3      and
+ 4      id
+ 5      not
+ 6      or
+
+
+========================================
+Nonterminals
+========================================
+
+7       <E>
+8       <F>
+9       <T>
+
+
+========================================
+Rules
+========================================
+
+0       <E> ::= <E> or <T>
+1       <E> ::= <T>
+2       <T> ::= <T> and <F>
+3       <T> ::= <F>
+4       <F> ::= not <F>
+5       <F> ::= id
+
+
+========================================
+LALR States
+========================================
+
+State 0
+        <S'> ::= _ <E> (EOF)         <S'> ::= ^ <E> (EOF)
+        <E> ::= _ <E> or <T>         <E> ::= ^ <E> or <T>
+        <E> ::= _ <T>                <E> ::= ^ <T>
+        <T> ::= _ <T> and <F>        <T> ::= ^ <T> and <F>
+        <T> ::= _ <F>                <T> ::= ^ <F>
+        <F> ::= _ not <F>            <F> ::= ^ not <F>
+        <F> ::= _ id                 <F> ::= ^ id
+
+        id s 1
+        not s 2
+        <E> g 3
+        <F> g 4
+        <T> g 5
+
+
+State 1
+        Prior States: 0, 2, 7, 8
+
+        <F> ::= id _                 <F> ::= id ^
+
+        (EOF) r 5
+        and r 5
+        or r 5
+
+
+State 2
+        Prior States: 0, 2, 7, 8
+
+        <F> ::= not _ <F>            <F> ::= not ^ <F>
+        <F> ::= _ not <F>            <F> ::= ^ not <F>
+        <F> ::= _ id                 <F> ::= ^ id
+
+        id s 1
+        not s 2
+        <F> g 6
+
+
+State 3
+        Prior States: 0
+
+        <S'> ::= <E> _ (EOF)         <S'> ::= <E> ^ (EOF)
+        <E> ::= <E> _ or <T>         <E> ::= <E> ^ or <T>
+
+        (EOF) a
+        or s 7
+
+
+State 4
+        Prior States: 0, 7
+
+        <T> ::= <F> _                <T> ::= <F> ^
+
+        (EOF) r 3
+        and r 3
+        or r 3
+
+
+State 5
+        Prior States: 0
+
+        <E> ::= <T> _                <E> ::= <T> ^
+        <T> ::= <T> _ and <F>        <T> ::= <T> ^ and <F>
+
+        and s 8
+        (EOF) r 1
+        or r 1
+
+
+State 6
+        Prior States: 2
+
+        <F> ::= not <F> _            <F> ::= not <F> ^
+
+        (EOF) r 4
+        and r 4
+        or r 4
+
+
+State 7
+        Prior States: 3
+
+        <E> ::= <E> or _ <T>         <E> ::= <E> or ^ <T>
+        <T> ::= _ <T> and <F>        <T> ::= ^ <T> and <F>
+        <T> ::= _ <F>                <T> ::= ^ <F>
+        <F> ::= _ not <F>            <F> ::= ^ not <F>
+        <F> ::= _ id                 <F> ::= ^ id
+
+        id s 1
+        not s 2
+        <F> g 4
+        <T> g 9
+
+
+State 8
+        Prior States: 5, 9
+
+        <T> ::= <T> and _ <F>        <T> ::= <T> and ^ <F>
+        <F> ::= _ not <F>            <F> ::= ^ not <F>
+        <F> ::= _ id                 <F> ::= ^ id
+
+        id s 1
+        not s 2
+        <F> g 10
+
+
+State 9
+        Prior States: 7
+
+        <E> ::= <E> or <T> _         <E> ::= <E> or <T> ^
+        <T> ::= <T> _ and <F>        <T> ::= <T> ^ and <F>
+
+        and s 8
+        (EOF) r 0
+        or r 0
+
+
+State 10
+        Prior States: 8
+
+        <T> ::= <T> and <F> _        <T> ::= <T> and <F> ^
+
+        (EOF) r 2
+        and r 2
+        or r 2
+
+
+
+
+========================================
+System Log
+========================================
+
+Grammar        Success           The grammar was successfully analyzed
+LALR States    Success           LALR Table was succesfully created
+
+
+
