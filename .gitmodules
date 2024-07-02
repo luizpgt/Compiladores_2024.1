@@ -1,0 +1,3 @@
+[submodule "Lexical_analysis"]
+	path = Lexical_analysis
+	url = https://github.com/luizpgt/Lexical_analysis.git
