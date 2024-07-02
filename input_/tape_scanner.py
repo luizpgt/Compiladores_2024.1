@@ -8,7 +8,10 @@ def read_tape(tape, program_output_tape_filename ):
     for line in data: 
         # translate old symbs to new symbs
         if '¨' in line:
-            esp, prefix, new_value = line.split()
+            line = line.split()
+            if len(line) < 3:
+                continue
+            esp, prefix, new_value = line
             dictionary[prefix] = new_value
         elif len(line) <= 1:
             continue
