@@ -1,6 +1,7 @@
 import copy
 
 from input_.lalr_scanner import read_lalr_info
+from input_.tape_scanner import read_tape
 from Lexical_analysis.Deterministic_finite_automaton.main import (
     generate_deterministic_state_transition_table,
     markdown_print,
@@ -30,9 +31,9 @@ if __name__ == "__main__":
     rules, stack, table, tape = [], [0], [], []
 
     table, rules = read_lalr_info("./GLCs/mat_ops.txt")
-    with open(program_output_tape_filename , 'r') as file:
-        data = file.read().rstrip()
-    tape = data.split()
+
+    tape = read_tape(tape, program_output_tape_filename)
+    print(tape)
 
     for row in table:
         print(row)

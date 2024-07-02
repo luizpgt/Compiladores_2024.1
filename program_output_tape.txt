@@ -1,1 +1,3 @@
-popen a pclose plus a (EOF)
+¨ $ (EOF)
+¨ 1_var_A a
+popen 1_var_A pclose plus 1_var_A  (EOF)
