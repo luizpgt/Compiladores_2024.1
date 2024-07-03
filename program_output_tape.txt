@@ -1,6 +1,5 @@
 ¨ popen
-¨ 1_var_A
+¨ 1_var_A a
 ¨ pclose
 ¨ plus
-¨ 1_var_A
- popen 1_var_A pclose plus 1_var_A
+ popen 1_var_A pclose plus 1_var_A (EOF)
