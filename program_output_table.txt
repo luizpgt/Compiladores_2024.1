@@ -1,0 +1,18 @@
+¨ popen
+¨ 1_var_A a
+¨ pclose
+¨ plus
+¨ times
+¨ $ (EOF)
+popen 1 popen
+1_var_A 1 123
+pclose 1 pclose
+plus 1 plus
+1_var_A 1 455
+times 1 times
+1_var_A 1 2
+plus 1 plus
+1_var_A 1 529
+times 1 times
+1_var_A 1 1
+$

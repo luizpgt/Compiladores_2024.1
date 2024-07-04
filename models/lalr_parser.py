@@ -1,35 +1,41 @@
-def print_action_sequence(stack, tape):
+def print_action_sequence(stack, stable):
     print(stack, end="\t\t")
-    tape.reverse()
-    print(tape)
-    tape.reverse()
+    stable.reverse()
+    print("[", end=" ")
+    for item in stable:
+        print(item.state_accept_value, end=" ")
+    print("]")
+    stable.reverse()
 
 class Lalr_Parser:
-    def parse_tape(rules, stack, table, tape):
-        tape.reverse()
+
+    def parse_table(rules, stack, parse_table, stable):
+        stable.reverse() # AQUI
+
+        # para guardar lista de tokens da linha:
+        current_line_tokens = []
+
         # para cada elemento da lista 
         FOUND = True
-        while len(tape): 
 
-            if not FOUND:
-                print("Foi encontrada uma inconsistência sintática na FITA:")
-                print("\tNão há ação para o elemento na cabeça de leitura da FITA para o estado atual da PILHA!!")
-                break
+        while len(stable): # AQUI
 
-            tape_el  = tape.pop(-1) # ultimo elemento fita 
+            table_el  = stable.pop(-1) # ultimo elemento fita 
             stack_el = stack[-1] # ultimo elemento da pilha 
 
+
+            FOUND = False
             # busca na tabela proxima acao
-            for col in table[stack_el]:
+            for col in parse_table[stack_el]:
                 col = col.split() 
-                FOUND = False
+                # FOUND = False
                 if len(col) == 2: # accept state
                     # filter for tape symbol
                     tab_symb, tab_act = col # symbol, action, transition
 
                     # tab_next = int(tab_next)
 
-                    if not (tape_el == tab_symb):
+                    if not (table_el.state_accept_value == tab_symb): # AQUI
                         continue
 
                     # if found symb, make action 
@@ -37,7 +43,7 @@ class Lalr_Parser:
 
                     # logic for accept
                     print("Sentença Reconhecida!!")
-                    tape.append(tape_el) # return element to tape
+                    stable.append(table_el) # return element to tape # AQUI
                     return True
 
                 elif len(col) == 3: # shift or reduce state
@@ -46,7 +52,7 @@ class Lalr_Parser:
 
                     tab_next = int(tab_next)
 
-                    if not (tape_el == tab_symb):
+                    if not (table_el.state_accept_value == tab_symb):
                         continue
 
                     # if found symb, make action 
@@ -55,13 +61,21 @@ class Lalr_Parser:
                     if tab_act == 's': # shift 
                         # tape element already removed
 
+                        # atualiza lista de tokens da linha 
+                        if len(current_line_tokens):
+                            if not (table_el.file_line == current_line_tokens[0][0]):
+                                current_line_tokens = []
+                            current_line_tokens.append([table_el.file_line, table_el.label ])
+                        else:
+                            current_line_tokens.append([table_el.file_line, table_el.label])
+
                         # add to stack: 
-                        stack.append(tape_el) # curr tape elem
+                        stack.append(table_el.state_accept_value) # curr tape elem
                         stack.append(tab_next) # next state
                         
                     elif tab_act == 'r': # reduce
                         # append again the removed element
-                        tape.append(tape_el)
+                        stable.append(table_el)
 
                         # capture rule info
                         rule = rules[tab_next]
@@ -78,7 +92,7 @@ class Lalr_Parser:
                         # goto next state
                         next_col = stack[-1]
                         next_row = stack[-2]
-                        for col in table[next_row]:
+                        for col in parse_table[next_row]:
                             col = col.split()
                             if col[0] == next_col and col[1] == 'g':
                                 stack.append(int(col[2]))
@@ -89,6 +103,29 @@ class Lalr_Parser:
                     return False
                 if FOUND:
                     # print stack and tape:
-                    print_action_sequence(stack, tape)
+                    print_action_sequence(stack, stable)
+                    # current_line_tokens.append(table_el.file_line, table_el.state_accept_value)
+                    # print(current_line_tokens)
                     break
+
+            if not FOUND:
+                stable.append(table_el)
+
+                print("Foi encontrada uma inconsistência sintática na FITA:")
+                print("\tNão há ação para o elemento na cabeça de leitura da FITA para o estado atual da PILHA!!")
+                print("================================================================")
+                print("PROGRAM ERROR: line ", table_el.file_line)
+                print("\t", end="")
+                for line, label in current_line_tokens:
+                    print(label, end=" ")
+                print("⊙", end=" ")
+                print(table_el.label)
+                print("================================================================")
+
+                # print("fita:")
+                # for el in stable:
+                #     print(el.state_accept_value, end=" ")
+                # print("---")
+                break
+
         return False

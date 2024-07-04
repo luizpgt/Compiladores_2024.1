@@ -1,14 +1,14 @@
 import copy
 
 from input_.lalr_scanner import read_lalr_info
-from input_.tape_scanner import read_tape
+from input_.stable_scanner import read_stable
 from Lexical_analysis.Deterministic_finite_automaton.main import (
     generate_deterministic_state_transition_table,
     markdown_print,
 )
 # from Lexical_analysis.input_.lexical_scanner import read_input_sentences
 # from Lexical_analysis.models.lexical_analyzer import Lexical_Analyzer
-from Lexical_analysis.main import generate_lexical_analyzer, print_stape_to_file
+from Lexical_analysis.main import generate_lexical_analyzer, print_stable_to_file
 from models.lalr_parser import Lalr_Parser
 
 import sys
@@ -18,7 +18,8 @@ if __name__ == "__main__":
 
     finite_automata_input_filename = "finite_automata_input.txt"
     program_filename = "example_program_file.txt"
-    program_output_tape_filename = "program_output_tape.txt"
+    program_output_stable_filename = "program_output_table.txt"
+    glc_filename = "./GLCs/mat_ops.txt"
 
     print("DETERMINISTIC STATE TRANSITION TABLE")
     print("------------------------------------")
@@ -31,7 +32,7 @@ if __name__ == "__main__":
     print(lexical_analyzer)
         
     if RUN_MODE == "lex":
-        print_stape_to_file(lexical_analyzer, program_output_tape_filename)
+        print_stable_to_file(lexical_analyzer, program_output_stable_filename)
         print("================================================================================")
         print("AGORA é preciso conferir o arquivo de FITA de saída para os ajustes necessários!")
         print("================================================================================")
@@ -39,14 +40,15 @@ if __name__ == "__main__":
     if RUN_MODE == "parse": 
         print("LALR PARSER")
         print("-----------")
-        rules, stack, table, tape = [], [0], [], []
+        rules, stack, parse_table, stable = [], [0], [], []
 
-        table, rules = read_lalr_info("./GLCs/mat_ops.txt")
+        parse_table, rules = read_lalr_info(glc_filename)
 
-        tape = read_tape(tape, program_output_tape_filename)
-        print(tape)
+        stable  = read_stable(program_output_stable_filename)
+        print("st")
+        print(stable)
 
-        for row in table:
+        for row in parse_table:
             print(row)
         print()
         
@@ -54,12 +56,16 @@ if __name__ == "__main__":
             print(row)
         print()
 
-        for ac in lexical_analyzer.det_state_transition_table.accept_states:
-            print(ac)
+        # for ac in lexical_analyzer.det_state_transition_table.accept_states:
+        #     print(ac)
+        print("stable:")
+        for el in stable:
+            print(el)
+        print("stable: fim ---")
 
-        parsed = Lalr_Parser.parse_tape(copy.deepcopy(rules), copy.deepcopy(stack), copy.deepcopy(table), copy.deepcopy(tape))
+        parsed = Lalr_Parser.parse_table(copy.deepcopy(rules), copy.deepcopy(stack), copy.deepcopy(parse_table), copy.deepcopy(stable))
 
         if parsed:
-            print("FIM: 0")
+            print("FIM: 0 (sentença reconhecida)")
         else:
-            print("FIM: 1")
+            print("FIM: 1 (erro sintático)")
